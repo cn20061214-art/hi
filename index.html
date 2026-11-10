@@ -259,16 +259,6 @@ function analyze(symbol, raw, minVol) {
   if(rising && dojiPrev && strongBear && cur.haClose<prev.haLow && volRatio>=Math.max(1.0,minVol*.8))
     candidates.push({side:'SHORT',type:'역추세 도지 반전',score:82+(volumeVery?5:0),level:prevActual.high,sl:Math.max(recentHigh,actual.high)});
 
-  // 2) EMA20 body breakout with EMA slope confirmation / turn.
-  const emaLongCross=prev.haClose<=e[p] && cur.haClose>eNow && cur.haOpen<eNow;
-  const emaShortCross=prev.haClose>=e[p] && cur.haClose<eNow && cur.haOpen>eNow;
-  const emaTurningUp=eNow>=e[Math.max(0,n-2)] && eNow>=ePrev*.9995;
-  const emaTurningDown=eNow<=e[Math.max(0,n-2)] && eNow<=ePrev*1.0005;
-  if(emaLongCross && strongBull && (emaTurningUp||flatTrend) && volumeOK)
-    candidates.push({side:'LONG',type:'EMA20 상승 돌파',score:88+(volumeVery?5:0),level:eNow,sl:eNow*0.9985});
-  if(emaShortCross && strongBear && (emaTurningDown||flatTrend) && volumeOK)
-    candidates.push({side:'SHORT',type:'EMA20 하락 돌파',score:88+(volumeVery?5:0),level:eNow,sl:eNow*1.0015});
-
   // 3) Bounce/rejection at a prior swing support/resistance.
   if(support && Math.abs(actual.low-support)/support<.0045 && strongBull && cur.haClose>prev.haClose && volumeOK)
     candidates.push({side:'LONG',type:'주요 지지 반등',score:78+(volumeVery?5:0),level:support,sl:Math.min(actual.low,recentLow)*.9985});
